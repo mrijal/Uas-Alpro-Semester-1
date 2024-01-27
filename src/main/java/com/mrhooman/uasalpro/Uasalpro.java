@@ -61,6 +61,7 @@ public class Uasalpro {
                     
                     System.out.print("Pilih event yang akan di pesan : ");
                     String pilihEvent = input.next();
+                    System.out.println("kamu memilih nomor : " + pilihEvent);
                     System.out.println("-----------------");
                     
                     break;
