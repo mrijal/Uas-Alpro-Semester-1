@@ -10,19 +10,23 @@ import java.util.Scanner;
 import java.util.Enumeration;
 import java.util.Collections;
 
+
 /**
  *
  * @author ACER
  */
 public class Uasalpro {
 
-    public record Event(String kode, String nama, String tempat, LocalDate tanggal){}
+    public record Event(String kode, String nama, String tempat, LocalDate tanggal){
+    }
     public record Item(String nomor, String kode){}
     public record Tiket(String kode, String JenisTiket, String kodeEvent, String namaPemesan, String noHp, String alamat, int jumlah, int totalHarga, String keterangan){}
     public record JenisTiket(String kodeEvent, String jenis, int maksimal){}
     
     static ArrayList<Event> listEvent = new ArrayList<>();
     static ArrayList<Item> container = new ArrayList<>();
+    
+    static Scanner input = new Scanner(System.in);
     
     public static void main(String[] args) {
         
@@ -31,7 +35,6 @@ public class Uasalpro {
         listEvent.add(new Event("JKT02", "Jakarta Fest","Jakarta", LocalDate.now()));
         listEvent.add(new Event("JKT02", "Jakarta Fest","Jakarta", LocalDate.now()));
         
-        Scanner input = new Scanner(System.in);
         boolean isActive = true;
         
         while(isActive){
@@ -48,22 +51,8 @@ public class Uasalpro {
         
             switch(pilihan){
                 case "1" :
-//                    cekEvent(listEvent);
-                    Enumeration<Event> e = Collections.enumeration(listEvent);
-                    System.out.println("Event yang akan datang : ");
-                    int i = 1;
-                    while(e.hasMoreElements()){
-                        Event currentEvent = e.nextElement();
-                        container.add(new Item(Integer.toString(i),currentEvent.kode));
-                        System.out.println(i + ". " +currentEvent.kode + " | " + currentEvent.nama + " | " + currentEvent.tempat + " | " + currentEvent.tanggal);
-                        i++;
-                    }
-                    
-                    System.out.print("Pilih event yang akan di pesan : ");
-                    String pilihEvent = input.next();
-                    System.out.println("kamu memilih nomor : " + pilihEvent);
-                    System.out.println("-----------------");
-                    
+                    Order order = new Order();
+                    order.cekEvent();
                     break;
                 case "2" :
 //                    cariEvent();
