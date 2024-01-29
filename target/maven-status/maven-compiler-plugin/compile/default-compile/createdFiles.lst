@@ -1,6 +1,7 @@
-com\mrhooman\uasalpro\Uasalpro$JenisTiket.class
-com\mrhooman\uasalpro\Uasalpro.class
 com\mrhooman\uasalpro\Uasalpro$Tiket.class
 com\mrhooman\uasalpro\Uasalpro$Event.class
 com\mrhooman\uasalpro\Uasalpro$Item.class
-com\mrhooman\uasalpro\Order.class
+com\mrhooman\uasalpro\EventClass.class
+com\mrhooman\uasalpro\ShowData.class
+com\mrhooman\uasalpro\Uasalpro$JenisTiket.class
+com\mrhooman\uasalpro\Uasalpro.class

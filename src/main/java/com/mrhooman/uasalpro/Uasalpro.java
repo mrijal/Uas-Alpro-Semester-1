@@ -61,12 +61,13 @@ public class Uasalpro {
 
             String pilihan = input.nextLine();
         
+            EventClass EventClass = new EventClass();
             switch(pilihan){
                 case "1" :
-                    Order order = new Order();
-                    order.cekEvent();
+                    EventClass.main();
                     break;
                 case "2" :
+                    EventClass.findEvent();
 //                    cariEvent();
                     break;
                 case "3" :

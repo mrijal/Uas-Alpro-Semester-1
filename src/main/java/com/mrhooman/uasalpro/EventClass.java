@@ -12,12 +12,19 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.Random;
-
+import java.time.LocalDate;
 /**
  *
  * @author ACER
  */
-public class Order {
+public class EventClass {
+    
+    Scanner input = new Scanner(System.in);
+    
+    public void main(){
+        cekEvent("", "");
+        order();
+    }
     
     public static String randomString() {
         int length = 5;
@@ -33,20 +40,42 @@ public class Order {
 
         return randomString.toString();
     }
-    public void cekEvent(){
+    public void cekEvent(String param, String searchCategory){
+        param.toLowerCase();
         Enumeration<Uasalpro.Event> e = Collections.enumeration(listEvent);
         System.out.println("Event yang akan datang : ");
-        Scanner input = new Scanner(System.in);
         int i = 1;
+        String category = null;
+        container.clear();
         
         //Show List of events
         while(e.hasMoreElements()){
             Uasalpro.Event currentEvent = e.nextElement();
-            container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
-            System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
+            if(param != null && !param.isEmpty()){
+                switch(searchCategory){
+                case "nama" :
+                    category = currentEvent.nama();
+                    break;
+                case "tempat" :
+                    category = currentEvent.tempat();
+                    break;
+                default:
+                    System.out.println("Kategory pencarian salah");
+                    return;
+                }
+                
+                if(currentEvent.tempat().toLowerCase().contains(param)){
+                    container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
+                    System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
+                }
+            } else {
+                container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
+                System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
+            }
             i++;
         }
-
+    }
+    public void order(){
         System.out.print("Pilih event yang akan di pesan (00 untuk kembali) : ");
         String pilihEvent = input.nextLine();
         
@@ -91,6 +120,7 @@ public class Order {
                 nomor++;
             }
             
+            //Proses pemilihan dan store data Jenis Tiket
             System.out.println("Pilih Jenis Tiket (cth : REGULER) : ");
             String pilihanTiket = input.nextLine();
             
@@ -103,7 +133,8 @@ public class Order {
                 }
                 index++;
             }
-            System.out.println(tiketTerpilih.harga());
+            
+            //Proses Input data tiket
             System.out.print("Masukkan Nama : ");
             String namaPemesan = input.nextLine();
             System.out.print("Masukkan Nomor Hp : ");
@@ -159,4 +190,14 @@ public class Order {
 //            System.out.printf("--------------------------------%n");
         }
     }   
+    
+    public void findEvent(){
+        System.out.print("Mau cari berdasarkan apa ? ");
+        String searchCategory = input.next();
+        
+        System.out.print("Masukkan Pencarian : ");
+        String search = input.next();
+        
+        cekEvent(search, searchCategory);
+    }
 }
