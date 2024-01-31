@@ -4,6 +4,7 @@
  */
 package com.mrhooman.uasalpro;
 
+import com.mrhooman.uasalpro.Uasalpro.Event;
 import static com.mrhooman.uasalpro.Uasalpro.container;
 import static com.mrhooman.uasalpro.Uasalpro.listEvent;
 import static com.mrhooman.uasalpro.Uasalpro.listJenisTiket;
@@ -13,6 +14,8 @@ import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.Random;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 /**
  *
  * @author ACER
@@ -22,13 +25,14 @@ public class EventClass {
     Scanner input = new Scanner(System.in);
     
     public void main(){
-        cekEvent("", "");
+        String[] empty = new String[2];
+        cekEvent(empty, "");
         order();
     }
     
     public static String randomString() {
         int length = 5;
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder();
 
         Random random = new Random();
@@ -40,9 +44,11 @@ public class EventClass {
 
         return randomString.toString();
     }
-    public void cekEvent(String param, String searchCategory){
-        param.toLowerCase();
+    
+    public void cekEvent(String[] param, String searchCategory){
+        System.out.println();
         Enumeration<Uasalpro.Event> e = Collections.enumeration(listEvent);
+        listEvent.sort(Comparator.comparing(Event::nama));
         System.out.println("Event yang akan datang : ");
         int i = 1;
         String category = null;
@@ -51,12 +57,13 @@ public class EventClass {
         //Show List of events
         while(e.hasMoreElements()){
             Uasalpro.Event currentEvent = e.nextElement();
-            if(param != null && !param.isEmpty()){
+            if(param[0] != null && !param[0].isEmpty()){
+                param[0].toLowerCase();
                 switch(searchCategory){
-                case "nama" :
+                case "1" :
                     category = currentEvent.nama();
                     break;
-                case "tempat" :
+                case "2" :
                     category = currentEvent.tempat();
                     break;
                 default:
@@ -64,7 +71,7 @@ public class EventClass {
                     return;
                 }
                 
-                if(currentEvent.tempat().toLowerCase().contains(param)){
+                if(category.toLowerCase().contains(param[0])){
                     container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
                     System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
                 }
@@ -192,11 +199,21 @@ public class EventClass {
     }   
     
     public void findEvent(){
-        System.out.print("Mau cari berdasarkan apa ? ");
+        System.out.println("Mau cari berdasarkan apa ? ");
+        System.out.println("1. Nama");
+        System.out.println("2. Tempat");
+        System.out.println("3. Tanggal");
         String searchCategory = input.next();
         
         System.out.print("Masukkan Pencarian : ");
-        String search = input.next();
+        String kata = input.next();
+        String[] search = new String[2];
+        search[0] = kata;
+        
+        if (searchCategory.equals("3")) {
+            String search2 = input.next();
+            search[1] = search2;
+        }
         
         cekEvent(search, searchCategory);
     }
