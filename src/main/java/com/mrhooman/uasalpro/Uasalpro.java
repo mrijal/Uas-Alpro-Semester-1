@@ -62,22 +62,17 @@ public class Uasalpro {
             String pilihan = input.nextLine();
         
             EventClass EventClass = new EventClass();
+            TiketClass TiketClass = new TiketClass();
             switch(pilihan){
                 case "1" :
                     EventClass.main();
-                    int index = 0;
-                    while(index < listTiket.size()){
-                        Tiket currentTiket = listTiket.get(index);
-                        System.out.printf("%-3s | %-10s | %n",index+1,currentTiket.kode, currentTiket.kodeEvent);
-                        index++;
-                    }
                     break;
                 case "2" :
                     EventClass.findEvent();
-//                    cariEvent();
                     break;
                 case "3" :
 //                    cekTiket();
+                    TiketClass.showTiket();
                     break;
                 case "4" :
 //                    loginAdmin();
