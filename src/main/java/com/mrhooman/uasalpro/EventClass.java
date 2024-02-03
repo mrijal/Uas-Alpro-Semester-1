@@ -24,17 +24,20 @@ public class EventClass {
     
     Scanner input = new Scanner(System.in);
     
+    // Fungsi utama untuk menjalankan menu 1 ( cek dan order )
     public void main(){
         String[] empty = new String[2];
         cekEvent(empty, "");
         order();
     }
     
+    // Fungsi untuk menghasilkan string random
     public static String randomString() {
         int length = 5;
         String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         StringBuilder randomString = new StringBuilder();
 
+        // Menggunakan library Random
         Random random = new Random();
         for (int i = 0; i < length; i++) {
             int index = random.nextInt(characters.length());
@@ -42,13 +45,19 @@ public class EventClass {
             randomString.append(randomChar);
         }
 
+        // Mengembalikan nilai String Hasil random
         return randomString.toString();
     }
     
+    // Fungsi Menampilkan semua data sekaligus melakukan pencarian jika dibutuhkan
     public void cekEvent(String[] param, String searchCategory){
         System.out.println();
         String category = null;
-        listEvent.sort(Comparator.comparing(Event::kode));
+        
+        // Sort record Event berdasarkan nama sebagai pengurutan default
+        listEvent.sort(Comparator.comparing(Event::nama));
+        
+        // Jika paramater pencarian berisi , maka urutkan sesuai kategori pencarian
         if (searchCategory != null || !searchCategory.isEmpty()) {
             category = searchCategory;
             switch(category) {
@@ -63,6 +72,8 @@ public class EventClass {
                     break;
             }
         }
+        
+        // Inisiasi Enumeration untuk menampilkan data ( Optional )
         Enumeration<Uasalpro.Event> e = Collections.enumeration(listEvent);
         System.out.println("Event yang akan datang : ");
         int i = 1;
@@ -71,6 +82,7 @@ public class EventClass {
         //Show List of events
         while(e.hasMoreElements()){
             Uasalpro.Event currentEvent = e.nextElement();
+            // Jika paramater pencarian berisi , maka urutkan sesuai kategori pencarian
             if(param[0] != null && !param[0].isEmpty()){
                 param[0].toLowerCase();
                 switch(searchCategory){
@@ -96,6 +108,8 @@ public class EventClass {
             i++;
         }
     }
+    
+    // Fungsi untuk proses pemesanan tiket
     public void order(){
         System.out.print("Pilih event yang akan di pesan (00 untuk kembali) : ");
         String pilihEvent = input.next();
@@ -129,7 +143,7 @@ public class EventClass {
             //Proses Order Tiket
             index = 0;
             int nomor = 1;
-            System.out.println("Pilih Jenis Tiket");
+            System.out.println();
             
             System.out.printf("%-2s | %-10s | %-5s | %-10s |%n", "NO", "JENIS TIKET", "KUOTA", "HARGA");
             while(index < listJenisTiket.size()){
@@ -142,7 +156,7 @@ public class EventClass {
             }
             
             //Proses pemilihan dan store data Jenis Tiket
-            System.out.println("Pilih Jenis Tiket (cth : REGULER) : ");
+            System.out.print("Pilih Jenis Tiket (cth : REGULER) : ");
             String pilihanTiket = input.next().toLowerCase();
             
             index = 0;
@@ -155,7 +169,11 @@ public class EventClass {
                 index++;
             }
             
-            //Proses Input data tiket
+            // Proses Input data tiket
+            System.out.println("");
+            System.out.println("------------------------------");
+            System.out.println("------ LENGKAPI BIODATA ------");
+            System.out.println("------------------------------");
             System.out.print("Masukkan Nama : ");
             String namaPemesan = input.next();
             System.out.print("Masukkan Nomor Hp : ");
@@ -167,9 +185,10 @@ public class EventClass {
             input.nextLine();
             double totalHarga = jumlahTiket * tiketTerpilih.harga();
             
-            System.out.printf("--------------------------------%n");
-            System.out.println("Konfirmasi Data : ");
-            System.out.printf("--------------------------------%n");
+            System.out.println("");
+            System.out.println("-----------------------------");
+            System.out.println("------ KONFIRMASI DATA ------");
+            System.out.println("-----------------------------");
             System.out.printf("%-15s : %-10s %n","Event", eventTerpilih.nama());
             System.out.printf("%-15s : %-10s %n","Jenis Tiket",tiketTerpilih.jenis());
             System.out.printf("%-15s : %-10s %n","Pemesan", namaPemesan);
@@ -179,7 +198,7 @@ public class EventClass {
             System.out.printf("%-15s : %,.2f %n","Total", totalHarga);
             
             System.out.print("Data sudah Benar (Y/N) ?");
-            String confirm = input.nextLine();
+            String confirm = input.next();
             
             boolean statusPilihan = true;
             while(statusPilihan){
@@ -188,14 +207,19 @@ public class EventClass {
                     listTiket.add(new Uasalpro.Tiket(id, tiketTerpilih.jenis(),kode,namaPemesan,noHpPemesan,alamatPemesan,jumlahTiket,totalHarga,"aktif"));
                     statusPilihan = false;
                     index = 0;
+                    System.out.println("Terima kasih telah memesan!");
+                            System.out.printf("%-24s %-25s %-10s %n","---------","TIKET EVENT","----------");
+                            System.out.printf("%-12s%-20s%-10s%-5s%-11s %n","------------","----------------------","----------","-----","------------");
+                            System.out.printf("%-7s %-20s | %-10s | %-10s %-7s %n","-------","Nama Pemesan","Kode Event","Kode Tiket","------");
                     while(index < listTiket.size()){
                         Uasalpro.Tiket currentTiket = listTiket.get(index);
                         if (currentTiket.kode().equals(id)) {
-                            System.out.printf("%-3s | %-10s | %n",index+1,currentTiket.kode(), currentTiket.kodeEvent());
+                            System.out.printf("%-12s%-20s%-10s%-5s%-11s %n","------------","----------------------","----------","-----","------------");
+                            System.out.printf("%-7s %-20s | %-10s | %-10s %-7s %n","-------",currentTiket.namaPemesan(),currentTiket.kodeEvent(),currentTiket.kode(),"------");
                         }
+                            System.out.printf("%-12s%-20s%-10s%-5s%-11s %n","------------","----------------------","----------","-----","------------");
                         index++;
                     }
-                    System.out.println("Terima kasih telah memesan!");
                 } else if (confirm.toLowerCase().equals("n")){
                     System.out.println("Pesanan Dibatalkan");
                     statusPilihan = false;
@@ -206,6 +230,7 @@ public class EventClass {
         }
     }   
     
+    // Fungsi pencarian event
     public void findEvent(){
         System.out.println("Mau cari berdasarkan apa ? ");
         System.out.println("1. Nama");

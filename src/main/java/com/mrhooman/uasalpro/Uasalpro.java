@@ -51,7 +51,7 @@ public class Uasalpro {
         
         while(isActive == true){
             //Tampilan Menu
-            System.out.println("Welcom to Tiketiing");
+            System.out.println("Welcome to Tiket1ing");
             System.out.println("1. Cek Event & Beli Tiket");
             System.out.println("2. Cari Event");
             System.out.println("3. Cek Tiket");
@@ -63,6 +63,7 @@ public class Uasalpro {
         
             EventClass EventClass = new EventClass();
             TiketClass TiketClass = new TiketClass();
+            AdminClass AdminClass = new AdminClass();
             switch(pilihan){
                 case "1" :
                     EventClass.main();
@@ -71,11 +72,34 @@ public class Uasalpro {
                     EventClass.findEvent();
                     break;
                 case "3" :
-//                    cekTiket();
-                    TiketClass.showTiket();
+                    System.out.print("Masukkan kode tiket : ");
+                    String kodeTiket = input.next();
+                    input.nextLine();
+                    if (TiketClass.cekTiket(kodeTiket)) {
+                        boolean state = true;
+                        while(state) {
+                            System.out.print("Tiket Aktif, Claim Tiket sekarang (Y/N) ? ");
+                            String confirm = input.next();
+                            input.nextLine();
+                            switch (confirm.toLowerCase()) {
+                                case "y":
+                                    TiketClass.claimTiket(kodeTiket);
+                                    System.out.print("Tiket berhasil di claim, Selamat bersenang senang!!");
+                                    state = false;
+                                    break;
+                                case "n":
+                                    System.out.print("Sampai jumpa!");
+                                    state = false;
+                                    break;
+                                default:
+                                    System.out.print("Pilihan tidak valid");
+                            }
+                            System.out.println("");
+                        }
+                    }
                     break;
                 case "4" :
-//                    loginAdmin();
+                    AdminClass.main();
                     break;
                 case "5" :
                     isActive = false;
