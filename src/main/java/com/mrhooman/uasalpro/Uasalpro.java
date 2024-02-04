@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
-
 /**
  *
  * @author ACER
@@ -34,11 +33,12 @@ public class Uasalpro {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE;
         
         LocalDate date = LocalDate.parse("2024-01-25", formatter);
+        
        
-        listEvent.add(new Event("BDG01", "bandung fest","Bandung", LocalDate.now()));
-        listEvent.add(new Event("BDG02", "bandung fest2","Bandung", LocalDate.now()));
-        listEvent.add(new Event("JKT01", "Jakarta Fest","Jakarta", LocalDate.now()));
-        listEvent.add(new Event("JKT02", "Jakarta Fest2","Jakarta", LocalDate.now()));
+        listEvent.add(new Event("BDG01", "bandung fest","Bandung", LocalDate.parse("2024-03-20")));
+        listEvent.add(new Event("BDG02", "bandung fest2","Bandung", LocalDate.parse("2024-02-29")));
+        listEvent.add(new Event("JKT01", "Jakarta Fest","Jakarta", LocalDate.parse("2024-03-10")));
+        listEvent.add(new Event("JKT02", "Jakarta Fest2","Jakarta", LocalDate.parse("2024-03-01")));
         
         listJenisTiket.add(new JenisTiket("BDG01", "REGULER", 100, 100000));
         listJenisTiket.add(new JenisTiket("BDG01", "VIP", 100, 200000));
@@ -51,7 +51,8 @@ public class Uasalpro {
         
         while(isActive == true){
             //Tampilan Menu
-            System.out.println("Welcome to Tiket1ing");
+            System.out.println("-------------------------");
+            System.out.println("Welcome to Tiketing");
             System.out.println("1. Cek Event & Beli Tiket");
             System.out.println("2. Cari Event");
             System.out.println("3. Cek Tiket");
@@ -74,29 +75,38 @@ public class Uasalpro {
                 case "3" :
                     System.out.print("Masukkan kode tiket : ");
                     String kodeTiket = input.next();
-                    input.nextLine();
                     if (TiketClass.cekTiket(kodeTiket)) {
                         boolean state = true;
                         while(state) {
                             System.out.print("Tiket Aktif, Claim Tiket sekarang (Y/N) ? ");
                             String confirm = input.next();
-                            input.nextLine();
                             switch (confirm.toLowerCase()) {
                                 case "y":
                                     TiketClass.claimTiket(kodeTiket);
-                                    System.out.print("Tiket berhasil di claim, Selamat bersenang senang!!");
+                                    System.out.println("---------------------------------------------------");
+                                    System.out.println("Tiket berhasil di claim, Selamat bersenang senang!!");
+                                    System.out.println("---------------------------------------------------");
                                     state = false;
                                     break;
                                 case "n":
-                                    System.out.print("Sampai jumpa!");
+                                    System.out.println("-------------");
+                                    System.out.println("Sampai jumpa!");
+                                    System.out.println("-------------");
                                     state = false;
                                     break;
                                 default:
-                                    System.out.print("Pilihan tidak valid");
+                                    System.out.println("-------------------");
+                                    System.out.println("Pilihan tidak valid");
+                                    System.out.println("-------------------");
                             }
                             System.out.println("");
                         }
+                    } else {
+                        System.out.println("-----------------");
+                        System.out.println("Tiket Tidak Valid");
+                        System.out.println("-----------------");
                     }
+                    input.nextLine();
                     break;
                 case "4" :
                     AdminClass.main();
@@ -105,7 +115,9 @@ public class Uasalpro {
                     isActive = false;
                     break;
                 default :
+                    System.out.println("-------------------");
                     System.out.println("Pilihan Tidak Valid");
+                    System.out.println("-------------------");
                     break;
             }
         }

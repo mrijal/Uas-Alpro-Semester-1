@@ -11,7 +11,7 @@ package com.mrhooman.uasalpro;
 public class TiketClass {
     
     // Fungsi untuk show semua tiket
-    public void showTiket(){
+    public static void showTiket(){
         int index = 0;
             System.out.printf("%-2s | %-15s | %-10s | %-10s | %-4s | %-10s | %-10s |%n","No", "Pemesan", "Kode Tiket", "Kode Event", "Jmlah", "Total", "Status");
         while (index < Uasalpro.listTiket.size()){

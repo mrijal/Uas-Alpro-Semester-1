@@ -4,6 +4,7 @@
  */
 package com.mrhooman.uasalpro;
 
+import static com.mrhooman.uasalpro.EventClass.cekEvent;
 import java.util.Scanner;
 
 /**
@@ -39,16 +40,25 @@ public class AdminClass {
                     
                     switch(pilihMenu){
                         case "1" :
-                            System.out.println("Tambah Event : ");
+                            EventClass.tambahEvent();
                             break;
                         case "2" :
-                            System.out.println("Edit Event : ");
+                            String[] emptyEdit = new String[2];
+                            cekEvent(emptyEdit, "");
+                            System.out.print("Pilih Event yang akan diedit : ");
+                            int pilihEvent = input.nextInt();
+                            input.nextLine();
+                            EventClass.editEvent(pilihEvent);
                             break;
                         case "3" :
-                            System.out.println("Hapus Event : ");
+                            String[] emptyDelete = new String[2];
+                            cekEvent(emptyDelete, "");
+                            System.out.print("Pilih Event yang akan dihapus : ");
+                            String pilihHapusEvent = input.nextLine();
+                            EventClass.deleteEvent(pilihHapusEvent);
                             break;
                         case "4" :
-                            System.out.println("Lihat Data Tiket : ");
+                            TiketClass.showTiket();
                             break;
                         case "00":
                             System.out.println("Logout success!!");
@@ -60,6 +70,10 @@ public class AdminClass {
                     }
                     System.out.println("");
                 }
+            } else {
+                System.out.println("-------------------------------");
+                System.out.println("Username atau Password Salah !!");
+                System.out.println("-------------------------------");
             }
         }
     }

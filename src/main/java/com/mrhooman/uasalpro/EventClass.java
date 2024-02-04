@@ -14,15 +14,17 @@ import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.Random;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.time.LocalDate;
 /**
  *
  * @author ACER
  */
 public class EventClass {
     
-    Scanner input = new Scanner(System.in);
+    static Scanner input = new Scanner(System.in);
     
     // Fungsi utama untuk menjalankan menu 1 ( cek dan order )
     public void main(){
@@ -50,12 +52,10 @@ public class EventClass {
     }
     
     // Fungsi Menampilkan semua data sekaligus melakukan pencarian jika dibutuhkan
-    public void cekEvent(String[] param, String searchCategory){
+    public static void cekEvent(String[] param, String searchCategory){
         System.out.println();
         String category = null;
-        
-        // Sort record Event berdasarkan nama sebagai pengurutan default
-        listEvent.sort(Comparator.comparing(Event::nama));
+        LocalDate categoryTanggal = null;
         
         // Jika paramater pencarian berisi , maka urutkan sesuai kategori pencarian
         if (searchCategory != null || !searchCategory.isEmpty()) {
@@ -77,9 +77,13 @@ public class EventClass {
         Enumeration<Uasalpro.Event> e = Collections.enumeration(listEvent);
         System.out.println("Event yang akan datang : ");
         int i = 1;
+        int nomorContainer = 1;
         container.clear();
         
         //Show List of events
+        System.out.println("--------------------------------------------------------------------");
+        System.out.printf("%-2s | %-7s | %-20s | %-15s | %-12s %n","NO","KODE","NAMA","LOKASI","TANGGAL");
+        System.out.println("--------------------------------------------------------------------");
         while(e.hasMoreElements()){
             Uasalpro.Event currentEvent = e.nextElement();
             // Jika paramater pencarian berisi , maka urutkan sesuai kategori pencarian
@@ -92,25 +96,36 @@ public class EventClass {
                 case "2" :
                     category = currentEvent.tempat();
                     break;
+                case "3" :
+                    categoryTanggal = currentEvent.tanggal();
+                    break;
                 default:
                     System.out.println("Kategory pencarian salah");
                     return;
                 }
-                
-                if(category.toLowerCase().contains(param[0])){
-                    container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
-                    System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
+                if (searchCategory.equals("3")) {
+                    if(categoryTanggal.isAfter(LocalDate.parse(param[1]).minusDays(i)) && categoryTanggal.isBefore(LocalDate.parse(param[0]).plusDays(1))){
+                        container.add(new Uasalpro.Item(Integer.toString(nomorContainer),currentEvent.kode()));
+                        System.out.printf("%-2s | %-7s | %-20s | %-15s | %-12s %n",i,currentEvent.kode(),currentEvent.nama(),currentEvent.tempat(),currentEvent.tanggal());
+                        nomorContainer++;
+                    }
+                } else {
+                    if(category.toLowerCase().contains(param[0])){
+                        container.add(new Uasalpro.Item(Integer.toString(nomorContainer),currentEvent.kode()));
+                        System.out.printf("%-2s | %-7s | %-20s | %-15s | %-12s %n",i,currentEvent.kode(),currentEvent.nama(),currentEvent.tempat(),currentEvent.tanggal());
+                        nomorContainer++;
+                    }
                 }
             } else {
                 container.add(new Uasalpro.Item(Integer.toString(i),currentEvent.kode()));
-                System.out.println(i + ". " +currentEvent.kode() + " | " + currentEvent.nama() + " | " + currentEvent.tempat() + " | " + currentEvent.tanggal());
+                System.out.printf("%-2s | %-7s | %-20s | %-15s | %-12s %n",i,currentEvent.kode(),currentEvent.nama(),currentEvent.tempat(),currentEvent.tanggal());
             }
             i++;
         }
     }
     
     // Fungsi untuk proses pemesanan tiket
-    public void order(){
+    public static void order(){
         System.out.print("Pilih event yang akan di pesan (00 untuk kembali) : ");
         String pilihEvent = input.next();
         
@@ -232,24 +247,172 @@ public class EventClass {
     
     // Fungsi pencarian event
     public void findEvent(){
+        System.out.println("--------------------------------------");
         System.out.println("Mau cari berdasarkan apa ? ");
         System.out.println("1. Nama");
         System.out.println("2. Tempat");
         System.out.println("3. Tanggal");
         System.out.print("Pilih kategori cari : ");
         String searchCategory = input.next();
-        
-        System.out.print("Masukkan Pencarian : ");
-        String kata = input.next();
         String[] search = new String[2];
-        search[0] = kata;
         
         if (searchCategory.equals("3")) {
+            System.out.print("Masukkan Tanggal Tanggal Awal (YYYY-MM-DD) : "); 
             String search2 = input.next();
+            System.out.print("Masukkan Tanggal Akhir (YYYY-MM-DD) : "); 
             search[1] = search2;
+        } else {
+            System.out.print("Masukkan Pencarian : "); 
         }
+       
+        String kata = input.next();
+        search[0] = kata;
+        
         
         cekEvent(search, searchCategory);
-        order();
+        if (container.size() < 1) {
+            System.out.println("Data Tidak ditemukan");
+            System.out.println("");
+        } else {
+            order();
+        }
+    }
+    
+    // Fungsi nuntuk menghapus data event
+    public static void deleteEvent(String indexEvent){
+        // Konfirmasi hapus
+        boolean isActive = false;
+        System.out.print("Yakin Hapus Event ? ");
+        String confirm = input.nextLine();
+        do {            
+            switch (confirm.toLowerCase()) {
+                case "y" :
+                    // Hapus data Event berdasarkan indexnya
+                    Uasalpro.listEvent.remove(Integer.parseInt(indexEvent));
+                    System.out.println("Berhasil Hapus Event !");
+                    break;
+                case "n" :
+                    System.out.println("Hapus event dibatalkan");
+                    break;
+                default :
+                    System.out.println("Pilihan tidak valid !");
+                    isActive = true;
+                    break;
+            }
+        } while (isActive);
+    }
+    
+    public static void editEvent(int indexEvent){
+        String kode = null;
+        Event selectedEvent = null;
+        int index = 0;
+        while(index < Uasalpro.container.size()){
+            if (index == indexEvent) {
+                Uasalpro.Item currentItem = container.get(index);
+                kode = currentItem.kode();
+            }
+            index++;
+        }
+        
+        index = 0;
+        while(index < listEvent.size()){
+            Event currentEvent = listEvent.get(index);
+            if (currentEvent.kode().equals(kode)) {
+                selectedEvent = currentEvent;
+            }
+            index++;
+        }
+        
+        System.out.println("Masukkan Data baru ( ketik - untuk tidak merubah ) : ");
+        System.out.print("Nama Event : ");
+        String namaEvent = input.nextLine();
+        if (namaEvent.equals("-")) {
+            namaEvent = selectedEvent.nama();
+        }
+        System.out.print("Lokasi Event : ");
+        String lokasiEvent = input.nextLine();
+        if (lokasiEvent.equals("-")) {
+            lokasiEvent = selectedEvent.tempat();
+        }
+        System.out.print("Tanggal Event (YYYY-MM-DD) : ");
+        String tanggalEvent = input.nextLine();
+        if (tanggalEvent.equals("-")) {
+            tanggalEvent = selectedEvent.tanggal().toString();
+        }
+        
+        Event updatedEvent = new Event(
+                selectedEvent.kode(),
+                namaEvent,
+                lokasiEvent,
+                LocalDate.parse(tanggalEvent)
+        );
+        
+        listEvent.set(indexEvent-1, updatedEvent);
+        System.out.print("Edit pilihan tiketnya (Y/N) ? ");
+        String confirmEditTIket = input.next();
+        switch(confirmEditTIket.toLowerCase()) {
+            case "y":
+                // Edit pilihan tiket
+                break;
+            case "n":
+                // Batal pilihan tiket
+                break;
+            default :
+                System.out.println("Pilihan tidak valid");
+                break;
+        }
+        System.out.println("Edit Event Berhasil !!");
+    }
+    
+    public static void tambahEvent(){
+        int sizeAwal = listEvent.size();
+        System.out.println("Masukkan Data Event Baru : ");
+        System.out.print("Kode Event ( Tidak dapat diubah lagi ) : ");
+        String kodeEvent = input.next();
+        input.nextLine();
+        System.out.print("Nama Event : ");
+        String namaEvent = input.nextLine();
+        System.out.print("Lokasi Event : ");
+        String lokasiEvent = input.nextLine();
+        System.out.print("Tanggal Event (YYYY-MM-DD) : ");
+        String tanggalEvent = input.next();
+        
+        Event eventBaru = new Event(
+                kodeEvent,
+                namaEvent,
+                lokasiEvent,
+                LocalDate.parse(tanggalEvent)
+        );
+        
+        listEvent.add(eventBaru);
+        int sizeAkhir = listEvent.size();
+        if (sizeAkhir - sizeAwal > 0) {
+            System.out.println("Tambah data tiket untuk event " + namaEvent);
+            boolean tambahTiket = true;
+            while(tambahTiket){
+                System.out.print("Masukkan Jenis Tiket (Cth REGULER) : ");
+                String jenisTiket = input.next();
+                System.out.println("Masukkan Harga untuk tiket " + jenisTiket + " (Cth 100000) : ");
+                double  hargaTiket = input.nextDouble();
+                System.out.println("Masukkan Jumlah Maksimal untuk tiket " + jenisTiket + " : ");
+                int maksimal = input.nextInt();
+                Uasalpro.JenisTiket newJenisTiket = new Uasalpro.JenisTiket(
+                        kodeEvent,
+                        jenisTiket,
+                        maksimal,
+                        hargaTiket
+                );
+                Uasalpro.listJenisTiket.add(newJenisTiket);
+                System.out.println("Tambah Jenis Tiket [" +jenisTiket+ "] untuk [" +namaEvent+"] Berhasil !");
+                System.out.print("Tambahkah Jenis Tiket lagi (Y/N) ? ");
+                String tambahLagi = input.next();
+                if (tambahLagi.toLowerCase().equals("n")) {
+                    tambahTiket = false;
+                }
+            }
+            System.out.println("Data Event berhasil ditambahkan!");
+        } else {
+            System.out.println("Data gagal ditambahkan, coba lagi nanti");
+        }
     }
 }
