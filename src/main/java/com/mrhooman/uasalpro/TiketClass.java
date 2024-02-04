@@ -6,7 +6,7 @@ package com.mrhooman.uasalpro;
 
 /**
  *
- * @author ACER
+ * @author Muhammad Rijal
  */
 public class TiketClass {
     
