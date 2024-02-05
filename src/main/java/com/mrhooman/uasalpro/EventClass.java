@@ -31,6 +31,7 @@ public class EventClass {
         String[] empty = new String[2];
         cekEvent(empty, "");
         order();
+        input.nextLine();
     }
     
     // Fungsi untuk menghasilkan string random
@@ -53,7 +54,7 @@ public class EventClass {
     
     // Fungsi Menampilkan semua data sekaligus melakukan pencarian jika dibutuhkan
     public static void cekEvent(String[] param, String searchCategory){
-        System.out.println();
+        System.out.println("");
         String category = null;
         LocalDate categoryTanggal = null;
         
@@ -289,8 +290,8 @@ public class EventClass {
     public static void deleteEvent(String indexEvent){
         // Konfirmasi hapus
         boolean isActive = false;
-        System.out.print("Yakin Hapus Event ? ");
-        String confirm = input.nextLine();
+        System.out.print("Yakin Hapus Event (Y/N) ? ");
+        String confirm = input.next();
         do {            
             switch (confirm.toLowerCase()) {
                 case "y" :
@@ -317,7 +318,7 @@ public class EventClass {
         Event selectedEvent = null;
         int index = 0;
         while(index < Uasalpro.container.size()){
-            if (index == indexEvent) {
+            if (index+1 == indexEvent) {
                 Uasalpro.Item currentItem = container.get(index);
                 kode = currentItem.kode();
             }
@@ -364,16 +365,21 @@ public class EventClass {
         // konfirmasi edit beserta pilihan tiket
         System.out.print("Edit pilihan tiketnya (Y/N) ? ");
         String confirmEditTIket = input.next();
-        switch(confirmEditTIket.toLowerCase()) {
-            case "y":
-                // Edit pilihan tiket
-                break;
-            case "n":
-                // Batal pilihan tiket
-                break;
-            default :
-                System.out.println("Pilihan tidak valid");
-                break;
+        boolean kondisiEditPilTiket = true;
+        while(kondisiEditPilTiket){
+            switch(confirmEditTIket.toLowerCase()) {
+                case "y":
+                    TiketClass.editJenisTiket(selectedEvent.kode());
+                    kondisiEditPilTiket = false;
+                    break;
+                case "n":
+                    System.out.println("Edit Jenis Tiket dibatalkan");
+                    kondisiEditPilTiket = false;
+                    break;
+                default :
+                    System.out.println("Pilihan tidak valid");
+                    break;
+            }
         }
         System.out.println("Edit Event Berhasil !!");
     }

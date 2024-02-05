@@ -129,7 +129,7 @@ public class Uasalpro {
                     // Jika inputan asal / tidak valid
                     System.out.println("-------------------");
                     System.out.println("Pilihan Tidak Valid");
-                    System.osut.println("-------------------");
+                    System.out.println("-------------------");
                     break;
             }
         }
