@@ -52,6 +52,7 @@ public class TiketClass {
                 // Kembalikan nilai True jika ditemukan
                 return true;
             }
+            index++;
         }
         // Jika tidak ada maka return false
         return false;
@@ -136,7 +137,7 @@ public class TiketClass {
         System.out.print("Masukkan kode tiket : ");
         String kodeTiket = input.nextLine();
         // Pengecekkan tiket dengan method cekTiket yang memerlukan argument kode tiket
-        if (cekTiket(kodeTiket) == true) {
+        if (cekTiket(kodeTiket)) {
             // Tiket Terdaftar
             boolean state = true;
             while (state) {
