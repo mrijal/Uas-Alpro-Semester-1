@@ -78,44 +78,7 @@ public class Uasalpro {
                     EventClass.findEvent();
                     break;
                 case "3" :
-                    // Proses input tiket
-                    System.out.print("Masukkan kode tiket : ");
-                    String kodeTiket = input.next();
-                    // Pengecekkan tiket dengan method cekTiket yang memerlukan argument kode tiket
-                    if (TiketClass.cekTiket(kodeTiket)) {
-                        // Tiket Terdaftar
-                        boolean state = true;
-                        while(state) {
-                            System.out.print("Tiket Aktif, Claim Tiket sekarang (Y/N) ? ");
-                            String confirm = input.next();
-                            switch (confirm.toLowerCase()) {
-                                case "y":
-                                    TiketClass.claimTiket(kodeTiket);
-                                    System.out.println("---------------------------------------------------");
-                                    System.out.println("Tiket berhasil di claim, Selamat bersenang senang!!");
-                                    System.out.println("---------------------------------------------------");
-                                    state = false;
-                                    break;
-                                case "n":
-                                    System.out.println("-------------");
-                                    System.out.println("Sampai jumpa!");
-                                    System.out.println("-------------");
-                                    state = false;
-                                    break;
-                                default:
-                                    System.out.println("-------------------");
-                                    System.out.println("Pilihan tidak valid");
-                                    System.out.println("-------------------");
-                            }
-                            System.out.println("");
-                        }
-                    } else {
-                        // Tiket tidak terdaftar
-                        System.out.println("-----------------");
-                        System.out.println("Tiket Tidak Valid");
-                        System.out.println("-----------------");
-                    }
-                    input.nextLine();
+                    TiketClass.prosesCekTiket();
                     break;
                 case "4" :
                     // Panggil Method main dari AdminClasss
@@ -132,6 +95,7 @@ public class Uasalpro {
                     System.out.println("-------------------");
                     break;
             }
+            System.out.println();
         }
         
         

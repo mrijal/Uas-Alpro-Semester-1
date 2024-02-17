@@ -51,7 +51,7 @@ public class AdminClass {
                             // Memanggil Method cekEvent dengan argument empty untuk menampilkan semua data event
                             cekEvent(emptyEdit, "");
                             System.out.print("Pilih Event yang akan diedit : ");
-                            String pilihEvent = input.next();
+                            String pilihEvent = input.nextLine();
                             // Memanggil Method EditEvent
                             EventClass.editEvent(Integer.parseInt(pilihEvent));
                             break;
